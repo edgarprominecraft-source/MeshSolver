@@ -459,7 +459,7 @@
     </div>
 
     <script>
-        // Пароль разработчика - можешь поменять на свой
+        // Пароль разработчика
         const DEVELOPER_PASSWORD = "AlphaWolf2024!";
         
         // Генератор кодов
@@ -515,7 +515,6 @@
         function adminLogin() {
             const password = prompt('Введите пароль разработчика:');
             if (password === DEVELOPER_PASSWORD) {
-                // Создаем сессию разработчика
                 currentUser = { 
                     name: 'Разработчик', 
                     role: 'developer', 
@@ -551,7 +550,6 @@
                 currentUser.code = code;
                 currentUser.lastSeen = new Date().toLocaleString();
                 
-                // Сохраняем обновленные данные
                 users[code] = currentUser;
                 localStorage.setItem('meshUsers', JSON.stringify(users));
                 
@@ -573,13 +571,11 @@
             
             if (message === '') return;
             
-            // Сообщение пользователя
             const userMessage = document.createElement('div');
             userMessage.className = 'message user-message';
             userMessage.innerHTML = `<strong>Вы:</strong> ${message}`;
             chatContainer.appendChild(userMessage);
             
-            // Ответ AI
             setTimeout(() => {
                 const aiMessage = document.createElement('div');
                 aiMessage.className = 'message ai-message';
@@ -603,7 +599,6 @@
                 chatContainer.appendChild(aiMessage);
                 chatContainer.scrollTop = chatContainer.scrollHeight;
                 
-                // Сохраняем в историю
                 updateUserData();
                 updateProfileInfo();
             }, 1000);
@@ -634,20 +629,17 @@
             let totalAnswers = 0;
             let activeUsers = 0;
             
-            // Показываем только активные коды
             Object.entries(users).forEach(([code, user]) => {
                 if (user.isActive !== false) {
                     totalAnswers += user.usedAnswers;
                     if (user.lastSeen) activeUsers++;
                     
-                    // Добавляем в список кодов
                     const codeItem = document.createElement('div');
                     codeItem.style.padding = '5px 0';
                     codeItem.style.borderBottom = '1px solid #ddd';
                     codeItem.innerHTML = `<strong>${code}</strong> - ${user.name} (${user.usedAnswers} ответов)`;
                     secretCodes.appendChild(codeItem);
                     
-                    // Добавляем в список пользователей
                     const userItem = document.createElement('div');
                     userItem.className = 'user-item';
                     userItem.innerHTML = `
@@ -704,21 +696,18 @@
             }
         }
 
-        // НАСТРОЙКИ - ТЕПЕРЬ РАБОЧИЕ
         function toggleDarkTheme() {
             const toggle = document.getElementById('darkThemeToggle');
             const settings = JSON.parse(localStorage.getItem('meshSettings'));
             settings.darkTheme = toggle.checked;
             localStorage.setItem('meshSettings', JSON.stringify(settings));
             
-            // Удаляем все темы
             document.body.classList.remove('dark-theme', 'blue-theme', 'green-theme', 'red-theme');
             
             if (toggle.checked) {
                 document.body.classList.add('dark-theme');
             }
             
-            // Применяем цветовую тему поверх темной
             applyThemeColor(settings.themeColor);
         }
 
@@ -753,7 +742,6 @@
         }
 
         function applyThemeColor(color) {
-            // Удаляем все цветовые темы
             document.body.classList.remove('blue-theme', 'green-theme', 'red-theme');
             
             if (color !== 'default') {
@@ -781,25 +769,20 @@
         function loadSettings() {
             const settings = JSON.parse(localStorage.getItem('meshSettings'));
             if (settings) {
-                // Темная тема
                 document.getElementById('darkThemeToggle').checked = settings.darkTheme;
                 if (settings.darkTheme) {
                     document.body.classList.add('dark-theme');
                 }
                 
-                // Размер шрифта
                 document.getElementById('fontSizeSlider').value = settings.fontSize;
                 changeFontSize(settings.fontSize);
                 
-                // Размер кнопок
                 document.getElementById('buttonPaddingSlider').value = settings.buttonPadding;
                 changeButtonPadding(settings.buttonPadding);
                 
-                // Цвет темы
                 document.getElementById('themeColorSelect').value = settings.themeColor;
                 applyThemeColor(settings.themeColor);
                 
-                // Уведомления
                 document.getElementById('notificationsToggle').checked = settings.notifications;
             }
         }
@@ -819,24 +802,20 @@
             showScreen('welcomeScreen');
         }
 
-        // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', function() {
             initDatabase();
             loadSettings();
             
-            // Запрашиваем разрешение на уведомления
             if ('Notification' in window && Notification.permission === 'default') {
                 Notification.requestPermission();
             }
             
-            // Обработка Enter в поле ввода
             document.getElementById('messageInput').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     sendMessage();
                 }
             });
             
-            // Обработка Enter в поле кода
             document.getElementById('codeInput').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     login();
